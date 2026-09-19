@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+.env*.local
+*.tsbuildinfo
+.firebase
+.env
+*.bat
+AGENTS.md
+CLAUDE.md
