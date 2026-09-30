@@ -89,6 +89,37 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "mazaq",
+    title: "Mazaq — Coffee Ordering Website & App",
+    category: "Full-Stack Web & Mobile",
+    summary: "A bilingual (English / Arabic RTL) ordering website and iOS/Android app for a specialty-coffee brand, built as one TypeScript monorepo.",
+    details: [
+      "Turborepo + pnpm monorepo: a Next.js 16 website and an Expo (iOS + Android) app sharing one design system, menu dataset, cart logic and translations.",
+      "Full English and Arabic support with right-to-left layouts on web (next-intl) and mobile (i18next).",
+      "Menu browsing, drink customization, cart with VAT and pickup slots, store finder, rewards and checkout.",
+      "Typed API layer with a mock backend, ready to swap for a real one (e.g. Supabase); Vitest unit tests and Playwright end-to-end tests.",
+    ],
+    tags: ["Next.js", "React Native / Expo", "TypeScript", "Tailwind CSS", "Turborepo"],
+    gradient: "from-amber-700/40 via-orange-900/20 to-transparent",
+    demo: "https://mazaq-coffee.web.app",
+    repo: "https://github.com/AbanoubRashad/Mazaq",
+  },
+  {
+    id: "flybirds",
+    title: "Flybirds — Footwear E-commerce Store",
+    category: "Full-Stack E-commerce",
+    summary: "A production-grade direct-to-consumer footwear storefront with faceted catalog, optimistic cart and role-based admin access.",
+    details: [
+      "Next.js App Router with React Server Components and URL-driven faceted filtering across 20 products and ~800 size/colour variants.",
+      "Prisma + PostgreSQL data model; money stored as integer cents and order items snapshot price and name.",
+      "Optimistic cart that reconciles with live stock and price on the server via debounced Server Actions.",
+      "Auth.js v5 with role-based access control enforced in edge middleware; zod-validated inputs throughout.",
+    ],
+    tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Auth.js"],
+    gradient: "from-sky-600/40 via-cyan-700/20 to-transparent",
+    repo: "https://github.com/AbanoubRashad/flybirds",
+  },
+  {
     id: "chess-robot",
     title: "Smart Robotic Control System & UI",
     category: "Mechatronics × Software",
