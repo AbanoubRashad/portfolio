@@ -89,6 +89,22 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "baytak",
+    title: "Baytak — Property Consultant Website",
+    category: "Real Estate Web App",
+    summary: "A calm, bilingual (English / Arabic RTL) website for an independent property consultant in Egypt: browse compounds and units, compare, plan payments, book visits and chat.",
+    details: [
+      "Search with area, budget, bedroom, type, developer, delivery and size filters synced to the URL, plus sorting and pagination.",
+      "Unit pages with a swipeable gallery and lightbox, the developer's payment plan and a live instalment calculator.",
+      "Visit booking with Egyptian mobile validation and calendar export; side-by-side compare of up to three units.",
+      "Chat widget with office-hours logic, WhatsApp deep links and a lead dashboard; light and dark themes, accessible and mobile-first.",
+    ],
+    tags: ["JavaScript", "HTML5", "CSS", "i18n / RTL", "Firebase Hosting"],
+    gradient: "from-sky-500/40 via-blue-700/20 to-transparent",
+    demo: "https://baytak-demo.web.app",
+    repo: "https://github.com/AbanoubRashad/baytak",
+  },
+  {
     id: "mazaq",
     title: "Mazaq — Coffee Ordering Website & App",
     category: "Full-Stack Web & Mobile",
