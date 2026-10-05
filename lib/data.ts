@@ -117,6 +117,7 @@ export const projects: Project[] = [
     ],
     tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Auth.js"],
     gradient: "from-sky-600/40 via-cyan-700/20 to-transparent",
+    demo: "https://flybirds-store.web.app",
     repo: "https://github.com/AbanoubRashad/flybirds",
   },
   {
