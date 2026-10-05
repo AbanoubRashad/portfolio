@@ -6,7 +6,6 @@ import { defaultContent, type Content } from "@/lib/data";
 import { ADMIN_EMAIL, auth, isFirebaseConfigured, loadContent, saveContent } from "@/lib/firebase";
 import { parseBackup } from "@/lib/content";
 import { Button } from "@/components/ui/button";
-import { Checkbox, Field, LinesField, ListEditor, Select, TagsField, TextArea } from "@/components/admin/fields";
 import { cn } from "@/lib/utils";
 import { ProjectsTab } from "@/components/admin/tabs/projects-tab";
 import { ProfileTab } from "@/components/admin/tabs/profile-tab";
