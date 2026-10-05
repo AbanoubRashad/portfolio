@@ -4,6 +4,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, type 
 import { Download, ExternalLink, LogOut, RotateCcw, Save, Loader2, Undo2, Upload } from "lucide-react";
 import { defaultContent, type Content, type Project } from "@/lib/data";
 import { ADMIN_EMAIL, auth, isFirebaseConfigured, loadContent, saveContent } from "@/lib/firebase";
+import { parseBackup } from "@/lib/content";
 import { serviceIcons } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox, Field, LinesField, ListEditor, Select, TagsField, TextArea } from "@/components/admin/fields";
@@ -96,9 +97,7 @@ export default function AdminPage() {
 
   const importJson = async (file: File) => {
     try {
-      const data = JSON.parse(await file.text()) as Partial<Content>;
-      if (!data || !Array.isArray(data.projects) || !data.site) throw new Error("This file isn't a portfolio backup.");
-      replaceContent({ ...defaultContent, ...data, site: { ...defaultContent.site, ...data.site } } as Content);
+      replaceContent(parseBackup(await file.text()));
       setStatus({ type: "ok", msg: `Imported ${file.name}. Review it, then click Save changes to publish.` });
     } catch (e) {
       setStatus({ type: "error", msg: e instanceof Error ? e.message : "Import failed" });

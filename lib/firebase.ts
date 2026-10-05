@@ -2,6 +2,7 @@ import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc, type Firestore } from "firebase/firestore";
 import { getAuth, type Auth } from "firebase/auth";
 import { defaultContent, type Content } from "./data";
+import { withDefaults } from "./content";
 
 /** Values come from .env.local (see .env.example). */
 const config = {
@@ -27,15 +28,6 @@ export const auth = (): Auth | undefined => (getApp() ? getAuth(getApp()!) : und
 
 /** All site content is stored in one Firestore document: portfolio/content */
 const CONTENT_PATH = ["portfolio", "content"] as const;
-
-/** Merge stored content over defaults so missing fields never break the site. */
-function withDefaults(data: Partial<Content> | undefined): Content {
-  return {
-    ...defaultContent,
-    ...data,
-    site: { ...defaultContent.site, ...data?.site, socials: { ...defaultContent.site.socials, ...data?.site?.socials } },
-  };
-}
 
 export async function loadContent(): Promise<Content> {
   const d = db();
