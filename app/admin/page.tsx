@@ -9,12 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox, Field, LinesField, ListEditor, Select, TagsField, TextArea } from "@/components/admin/fields";
 import { cn } from "@/lib/utils";
 import { ProjectsTab } from "@/components/admin/tabs/projects-tab";
+import { SkillsTab } from "@/components/admin/tabs/skills-tab";
 import { ServicesTab } from "@/components/admin/tabs/services-tab";
 
 const TABS = ["Projects", "Services", "Skills", "Stats", "Profile & Contact"] as const;
 type Tab = (typeof TABS)[number];
 
-const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `item-${Date.now()}`;
 
 export default function AdminPage() {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -176,23 +176,7 @@ export default function AdminPage() {
 
         {tab === "Services" && <ServicesTab content={content} update={update} />}
 
-        {tab === "Skills" && (
-          <ListEditor
-            items={content.competencies}
-            onChange={(v) => update("competencies", v)}
-            title={(c) => c.label}
-            addLabel="Add skill category (tab)"
-            newItem={() => ({ key: `cat-${Date.now()}`, label: "New Category", items: [], note: "" })}
-            render={(c, set) => (
-              <>
-                <Field label="Tab name" value={c.label} onChange={(v) => set({ label: v, key: c.key || slug(v) })} />
-                <div />
-                <div className="sm:col-span-2"><TextArea label="Description" value={c.note} onChange={(v) => set({ note: v })} /></div>
-                <div className="sm:col-span-2"><TagsField label="Skills" value={c.items} onChange={(v) => set({ items: v })} /></div>
-              </>
-            )}
-          />
-        )}
+        {tab === "Skills" && <SkillsTab content={content} update={update} />}
 
         {tab === "Stats" && (
           <ListEditor
