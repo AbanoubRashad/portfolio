@@ -1,5 +1,7 @@
 # Abanoub Rashad — Portfolio
 
+[![CI](https://github.com/AbanoubRashad/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/AbanoubRashad/portfolio/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Next.js 14 (static export) · TypeScript · Tailwind · Framer Motion · Firebase Hosting + Firestore CMS.
 
 **Live site:** https://abanoub--rashad.web.app
@@ -17,7 +19,28 @@ Next.js 14 (static export) · TypeScript · Tailwind · Framer Motion · Firebas
 ## Run locally
 ```
 npm install
+cp .env.example .env.local   # then fill in the Firebase web app keys
 npm run dev        # http://localhost:3000  (CMS at /admin)
+```
+
+## Checks
+```
+npm run lint       # ESLint (Next.js + TypeScript rules)
+npm test           # Vitest: content merging, backup import, default data
+npm run build      # static export to ./out
+```
+GitHub Actions runs all three on every push.
+
+## Project structure
+```
+app/                 pages, metadata, sitemap, robots, manifest, icon
+app/admin/           CMS shell: sign-in, save, import / export
+components/admin/    form fields and one component per CMS tab
+components/sections/ public site sections
+lib/content.ts       merging stored content over defaults, backup parsing
+lib/data.ts          default content (used when Firestore is empty)
+lib/firebase.ts      Firestore + Auth (loaded lazily on the public site)
+tests/               Vitest suites
 ```
 
 ## CMS (add / edit / delete content)
