@@ -14,8 +14,17 @@ export const metadata: Metadata = {
     title: "Abanoub Rashad | Software Engineer & Systems Architect",
     description: "Engineering scalable web applications & smart systems.",
     type: "website",
-    images: ["/profile.jpg"],
+    url: "/",
+    siteName: "Abanoub Rashad",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Abanoub Rashad — Engineering scalable web applications & smart systems" }],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Abanoub Rashad | Software Engineer & Systems Architect",
+    description: "Engineering scalable web applications & smart systems.",
+    images: ["/og.png"],
+  },
+  alternates: { canonical: "/" },
 };
 
 export const viewport: Viewport = { themeColor: "#090D16" };
