@@ -8,6 +8,8 @@ import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 const item = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } };
+// The headline only slides in: it stays visible from the first paint, so it counts as painted right away (LCP).
+const headline = { hidden: { y: 24 }, show: { y: 0, transition: { duration: 0.6 } } };
 
 export function Hero() {
   const { site, stats } = useContent();
@@ -23,7 +25,7 @@ export function Hero() {
           <StatusDot /> {site.title} · {site.subtitle}
         </motion.div>
 
-        <motion.h1 variants={item} className="mx-auto max-w-4xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+        <motion.h1 variants={headline} className="mx-auto max-w-4xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
           Engineering{" "}
           <span className="bg-gradient-to-r from-accent-soft via-accent to-teal bg-clip-text text-transparent">Scalable Web Applications</span>{" "}
           &amp; Smart Systems.
