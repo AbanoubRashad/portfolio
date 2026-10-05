@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ChevronDown, ChevronUp, ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowDown, ArrowUp, Copy, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const base =
@@ -71,14 +71,16 @@ export function Checkbox({ label, checked, onChange }: { label: string; checked:
 /**
  * Generic list editor: add, delete, reorder and expand items.
  * `render` receives the item and an `update` function for partial changes.
+ * `duplicate` customizes copies (e.g. to give them a new id).
  */
-export function ListEditor<T>({ items, onChange, render, title, newItem, addLabel }: {
+export function ListEditor<T>({ items, onChange, render, title, newItem, addLabel, duplicate }: {
   items: T[];
   onChange: (items: T[]) => void;
   render: (item: T, update: (patch: Partial<T>) => void) => React.ReactNode;
   title: (item: T) => string;
   newItem: () => T;
   addLabel: string;
+  duplicate?: (item: T) => T;
 }) {
   const [open, setOpen] = useState<number | null>(null);
   const move = (i: number, dir: -1 | 1) => {
@@ -94,6 +96,11 @@ export function ListEditor<T>({ items, onChange, render, title, newItem, addLabe
     onChange(items.filter((_, k) => k !== i));
     setOpen(null);
   };
+  const copy = (i: number) => {
+    const clone = duplicate ? duplicate(items[i]) : (JSON.parse(JSON.stringify(items[i])) as T);
+    onChange([...items.slice(0, i + 1), clone, ...items.slice(i + 1)]);
+    setOpen(i + 1);
+  };
   const btn = "grid h-8 w-8 place-items-center rounded-md text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-30";
 
   return (
@@ -107,6 +114,7 @@ export function ListEditor<T>({ items, onChange, render, title, newItem, addLabe
             </button>
             <button className={btn} onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up"><ArrowUp className="h-4 w-4" /></button>
             <button className={btn} onClick={() => move(i, 1)} disabled={i === items.length - 1} aria-label="Move down"><ArrowDown className="h-4 w-4" /></button>
+            <button className={btn} onClick={() => copy(i)} aria-label="Duplicate" title="Duplicate"><Copy className="h-4 w-4" /></button>
             <button className={cn(btn, "hover:text-red-400")} onClick={() => remove(i)} aria-label="Delete"><Trash2 className="h-4 w-4" /></button>
           </div>
           {open === i && (

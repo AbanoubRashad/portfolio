@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, type User } from "firebase/auth";
-import { Download, ExternalLink, LogOut, RotateCcw, Save, Loader2 } from "lucide-react";
+import { Download, ExternalLink, LogOut, RotateCcw, Save, Loader2, Undo2, Upload } from "lucide-react";
 import { defaultContent, type Content, type Project } from "@/lib/data";
 import { ADMIN_EMAIL, auth, isFirebaseConfigured, loadContent, saveContent } from "@/lib/firebase";
 import { serviceIcons } from "@/lib/icons";
@@ -32,6 +32,9 @@ export default function AdminPage() {
   const [tab, setTab] = useState<Tab>("Projects");
   const [status, setStatus] = useState<{ type: "ok" | "error"; msg: string } | null>(null);
   const [saving, setSaving] = useState(false);
+  // Bumped whenever content is replaced wholesale, so text fields re-read their values.
+  const [version, setVersion] = useState(0);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const isAdmin = user?.email === ADMIN_EMAIL;
   const dirty = useMemo(() => content !== null && JSON.stringify(content) !== saved, [content, saved]);
@@ -46,7 +49,7 @@ export default function AdminPage() {
   // Load content once the owner is signed in.
   useEffect(() => {
     if (!isAdmin) return;
-    loadContent().then((c) => { setContent(c); setSaved(JSON.stringify(c)); });
+    loadContent().then((c) => { replaceContent(c); setSaved(JSON.stringify(c)); });
   }, [isAdmin]);
 
   // Warn before leaving with unsaved changes.
@@ -55,6 +58,8 @@ export default function AdminPage() {
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
   }, [dirty]);
+
+  const replaceContent = (c: Content) => { setContent(c); setVersion((v) => v + 1); };
 
   const update = <K extends keyof Content>(key: K, value: Content[K]) => setContent((c) => (c ? { ...c, [key]: value } : c));
 
@@ -70,6 +75,33 @@ export default function AdminPage() {
       setStatus({ type: "error", msg: e instanceof Error ? e.message : "Save failed" });
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Ctrl/Cmd + S saves.
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        if (dirty && !saving) handleSave();
+      }
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  });
+
+  const discard = () => {
+    if (window.confirm("Discard all unsaved changes?")) replaceContent(JSON.parse(saved) as Content);
+  };
+
+  const importJson = async (file: File) => {
+    try {
+      const data = JSON.parse(await file.text()) as Partial<Content>;
+      if (!data || !Array.isArray(data.projects) || !data.site) throw new Error("This file isn't a portfolio backup.");
+      replaceContent({ ...defaultContent, ...data, site: { ...defaultContent.site, ...data.site } } as Content);
+      setStatus({ type: "ok", msg: `Imported ${file.name}. Review it, then click Save changes to publish.` });
+    } catch (e) {
+      setStatus({ type: "error", msg: e instanceof Error ? e.message : "Import failed" });
     }
   };
 
@@ -125,7 +157,8 @@ export default function AdminPage() {
           </div>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex"><a href="/" target="_blank"><ExternalLink className="h-4 w-4" /> View site</a></Button>
-            <Button size="sm" onClick={handleSave} disabled={!dirty || saving}>
+            {dirty && <Button variant="ghost" size="sm" onClick={discard}><Undo2 className="h-4 w-4" /> Discard</Button>}
+            <Button size="sm" onClick={handleSave} disabled={!dirty || saving} title="Ctrl + S">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               {dirty ? "Save changes" : "Saved"}
             </Button>
@@ -134,7 +167,7 @@ export default function AdminPage() {
         </div>
       </header>
 
-      <main className="container py-8">
+      <main key={version} className="container py-8">
         {status && (
           <div className={cn("mb-6 rounded-xl border px-4 py-3 text-sm", status.type === "ok" ? "border-teal/40 bg-teal/10 text-teal" : "border-red-500/40 bg-red-500/10 text-red-300")}>
             {status.msg}
@@ -156,6 +189,7 @@ export default function AdminPage() {
             onChange={(v) => update("projects", v)}
             title={(p) => p.title}
             addLabel="Add project"
+            duplicate={(p) => ({ ...p, id: `${p.id}-copy-${Date.now()}`, title: `${p.title} (copy)` })}
             newItem={() => ({ id: `project-${Date.now()}`, title: "New Project", category: "Web Application", summary: "", details: [], tags: [], gradient: GRADIENTS.Blue, repo: content.site.socials.github })}
             render={(p, set) => (
               <>
@@ -167,7 +201,11 @@ export default function AdminPage() {
                 <Select label="Cover color" value={gradientName(p.gradient)} options={Object.keys(GRADIENTS)} onChange={(v) => set({ gradient: GRADIENTS[v] })} />
                 <Field label="Live demo URL" value={p.demo} placeholder="https://..." onChange={(v) => set({ demo: v || undefined })} />
                 <Field label="GitHub repo URL" value={p.repo} placeholder="https://github.com/..." onChange={(v) => set({ repo: v || undefined })} />
-                <div className="sm:col-span-2"><Field label="Cover image URL (optional)" value={p.image} placeholder="https://... (.jpg / .png)" hint="Leave empty to use the cover color" onChange={(v) => set({ image: v || undefined })} /></div>
+                <div className="sm:col-span-2"><Field label="Cover image URL (optional)" value={p.image} placeholder="https://... (.jpg / .png)" hint="Leave empty to use the cover color" onChange={(v) => set({ image: v || undefined })} />
+                  {p.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.image} alt="Cover preview" className="mt-3 h-32 w-full max-w-sm rounded-lg border border-slate-800 object-cover" />
+                  )}</div>
                 <Checkbox label='Show "Coming soon" badge' checked={!!p.placeholder} onChange={(v) => set({ placeholder: v })} />
               </>
             )}
@@ -250,7 +288,10 @@ export default function AdminPage() {
 
         <div className="mt-10 flex flex-wrap gap-3 border-t border-slate-800 pt-6">
           <Button variant="outline" size="sm" onClick={exportJson}><Download className="h-4 w-4" /> Export backup (JSON)</Button>
-          <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Replace everything with the original default content? (Not saved until you click Save.)")) setContent(defaultContent); }}>
+          <Button variant="outline" size="sm" onClick={() => fileInput.current?.click()}><Upload className="h-4 w-4" /> Import backup</Button>
+          <input ref={fileInput} type="file" accept="application/json,.json" className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) importJson(f); e.target.value = ""; }} />
+          <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Replace everything with the original default content? (Not saved until you click Save.)")) replaceContent(defaultContent); }}>
             <RotateCcw className="h-4 w-4" /> Reset to defaults
           </Button>
         </div>
