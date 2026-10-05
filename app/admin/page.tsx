@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox, Field, LinesField, ListEditor, Select, TagsField, TextArea } from "@/components/admin/fields";
 import { cn } from "@/lib/utils";
 import { ProjectsTab } from "@/components/admin/tabs/projects-tab";
+import { StatsTab } from "@/components/admin/tabs/stats-tab";
 import { SkillsTab } from "@/components/admin/tabs/skills-tab";
 import { ServicesTab } from "@/components/admin/tabs/services-tab";
 
@@ -178,21 +179,7 @@ export default function AdminPage() {
 
         {tab === "Skills" && <SkillsTab content={content} update={update} />}
 
-        {tab === "Stats" && (
-          <ListEditor
-            items={content.stats}
-            onChange={(v) => update("stats", v)}
-            title={(s) => `${s.value} · ${s.label}`}
-            addLabel="Add stat"
-            newItem={() => ({ value: "", label: "" })}
-            render={(s, set) => (
-              <>
-                <Field label="Value" value={s.value} placeholder="e.g. 10+" onChange={(v) => set({ value: v })} />
-                <Field label="Label" value={s.label} placeholder="e.g. Projects Delivered" onChange={(v) => set({ label: v })} />
-              </>
-            )}
-          />
-        )}
+        {tab === "Stats" && <StatsTab content={content} update={update} />}
 
         {tab === "Profile & Contact" && (() => {
           const s = content.site;
