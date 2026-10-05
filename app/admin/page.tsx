@@ -5,11 +5,11 @@ import { Download, ExternalLink, LogOut, RotateCcw, Save, Loader2, Undo2, Upload
 import { defaultContent, type Content } from "@/lib/data";
 import { ADMIN_EMAIL, auth, isFirebaseConfigured, loadContent, saveContent } from "@/lib/firebase";
 import { parseBackup } from "@/lib/content";
-import { serviceIcons } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox, Field, LinesField, ListEditor, Select, TagsField, TextArea } from "@/components/admin/fields";
 import { cn } from "@/lib/utils";
 import { ProjectsTab } from "@/components/admin/tabs/projects-tab";
+import { ServicesTab } from "@/components/admin/tabs/services-tab";
 
 const TABS = ["Projects", "Services", "Skills", "Stats", "Profile & Contact"] as const;
 type Tab = (typeof TABS)[number];
@@ -174,23 +174,7 @@ export default function AdminPage() {
 
         {tab === "Projects" && <ProjectsTab content={content} update={update} />}
 
-        {tab === "Services" && (
-          <ListEditor
-            items={content.services}
-            onChange={(v) => update("services", v)}
-            title={(s) => s.title}
-            addLabel="Add service"
-            newItem={() => ({ icon: "Code2", title: "New Service", description: "", stack: [] })}
-            render={(s, set) => (
-              <>
-                <Field label="Title" value={s.title} onChange={(v) => set({ title: v })} />
-                <Select label="Icon" value={s.icon} options={Object.keys(serviceIcons)} onChange={(v) => set({ icon: v })} />
-                <div className="sm:col-span-2"><TextArea label="Description" value={s.description} onChange={(v) => set({ description: v })} /></div>
-                <div className="sm:col-span-2"><TagsField label="Tech badges" value={s.stack} onChange={(v) => set({ stack: v })} /></div>
-              </>
-            )}
-          />
-        )}
+        {tab === "Services" && <ServicesTab content={content} update={update} />}
 
         {tab === "Skills" && (
           <ListEditor
