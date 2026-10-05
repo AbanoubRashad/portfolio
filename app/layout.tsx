@@ -46,6 +46,10 @@ export const viewport: Viewport = { themeColor: "#090D16" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`dark ${jakarta.variable}`}>
+      <head>
+        {/* Content is loaded from Firestore on every visit; open the connection early. */}
+        <link rel="preconnect" href="https://firestore.googleapis.com" crossOrigin="anonymous" />
+      </head>
       <body className="font-sans">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
         {children}
