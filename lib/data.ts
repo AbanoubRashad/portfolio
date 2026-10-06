@@ -89,6 +89,22 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "manhal",
+    title: "Manhal — Online Learning Platform",
+    category: "Full-Stack E-learning",
+    summary: "A bilingual (English / Arabic RTL) online course platform for Egypt and the Arab world, like Udemy or Yanfaa, for learners, instructors and admins.",
+    details: [
+      "Node.js 22 with zero npm dependencies: node:http, node:sqlite with safe migrations, scrypt auth, CSRF and CSP protection, and 72 node:test tests.",
+      "Paymob Intention API checkout with HMAC-verified, idempotent webhooks for paid, pending, failed and refunded orders; coupons and emailed receipts.",
+      "Lesson player with Bunny Stream signed URLs, notes, progress, checkpoint quizzes and publicly verifiable certificates.",
+      "Instructor studio with a curriculum editor, earnings ledger and payout requests; an admin console; and a live demo that runs the real server code in the browser on SQLite-WASM.",
+    ],
+    tags: ["Node.js", "SQLite", "Vanilla JS", "Paymob", "i18n / RTL"],
+    gradient: "from-teal-500/40 via-cyan-800/20 to-transparent",
+    demo: "https://manhal-learning.web.app",
+    repo: "https://github.com/AbanoubRashad/manhal",
+  },
+  {
     id: "baytak",
     title: "Baytak — Property Consultant Website",
     category: "Real Estate Web App",
