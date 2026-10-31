@@ -107,6 +107,24 @@ export const projects: Project[] = [
     repo: "https://github.com/AbanoubRashad/sekka",
   },
   {
+    id: "nabd",
+    title: "Nabd — Real-time IoT Monitoring with Real Hardware",
+    category: "Mechatronics × Software · Real-time IoT",
+    summary: "ESP32-S3 sensor nodes on rooftops, farms, clinics and cold rooms stream to one live dashboard in English and Arabic. Readings reach the screen in under a second, relays switch from the browser with device-confirmed feedback, alerts go out on WhatsApp, and firmware updates are signed and roll back on their own.",
+    details: [
+      "ESP32-S3 firmware (C++, PlatformIO): TLS MQTT with a pinned CA, a 5,000-reading flash buffer that replays with original timestamps, fail-safe relays, a watchdog, and ECDSA-signed OTA with automatic rollback; native unit tests for the core logic.",
+      "Pipeline: EMQX with a per-device ACL → ingest worker (zod validation, idempotent batch inserts, dead letters) → TimescaleDB hypertable with roll-ups; the API pushes readings live over WebSocket and back-fills gaps by sequence number.",
+      "Commands you can trust: sent → delivered → confirmed by the device with real timings, a 10 s timeout that restores the true state, and demo visitors limited to simulated devices.",
+      "Alert rules as a tested state machine (wait time, hysteresis, cool-down, quiet hours, escalation), WhatsApp Cloud API templates with reply-to-acknowledge, and a 7-day backtest.",
+      "Next.js 16 dashboard and marketing site with next-intl RTL, uPlot live charts, a 12-device simulator for the public demo, and 150+ unit, integration and Playwright tests.",
+    ],
+    tags: ["ESP32-S3", "MQTT", "TimescaleDB", "WebSocket", "Next.js", "Fastify", "Signed OTA", "RTL"],
+    gradient: "from-emerald-500/40 via-teal-800/20 to-transparent",
+    image: "/projects/nabd.jpg",
+    demo: "https://nabd-iot.vercel.app",
+    repo: "https://github.com/AbanoubRashad/nabd",
+  },
+  {
     id: "basma-clinic",
     title: "Basma — Clinic Website & Booking Portal",
     category: "Multi-tenant SaaS · Healthcare",
@@ -251,7 +269,7 @@ export const projects: Project[] = [
     ],
     tags: ["IoT", "Dashboard", "Embedded C", "Realtime"],
     gradient: "from-amber-500/40 via-orange-600/20 to-transparent",
-    repo: "https://github.com/AbanoubRashad",
+    repo: "https://github.com/AbanoubRashad/nabd",
   },
 ];
 
