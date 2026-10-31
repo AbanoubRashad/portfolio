@@ -103,6 +103,7 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Supabase", "PostGIS", "Realtime", "PWA", "Arabic RTL"],
     gradient: "from-violet-600/40 via-emerald-500/20 to-transparent",
     image: "/projects/sekka.jpg",
+    demo: "https://sekka-eight.vercel.app/en/demo",
     repo: "https://github.com/AbanoubRashad/sekka",
   },
   {
