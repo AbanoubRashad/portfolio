@@ -89,6 +89,23 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "sekka",
+    title: "Sekka — Food Delivery Platform, Four Roles Synced Live",
+    category: "Full-Stack Real-time Web App",
+    summary: "An Arabic-first (RTL) food delivery website where the customer, the restaurant, the courier and the admin each get their own section, and every order moves between them live: placed, accepted, cooked, picked up, and delivered with a 4-digit code while the customer watches the courier on a map.",
+    details: [
+      "Next.js 16 App Router with Cache Components and native i18n (Arabic / English); restaurant pages are prerendered and refreshed the moment the owner edits the menu.",
+      "Supabase Postgres with Row Level Security on every table; prices, totals, promo codes and order statuses are decided only in SECURITY DEFINER functions, never trusted from the browser. Couriers claim orders atomically, so exactly one wins.",
+      "Live tracking over Supabase Realtime and PostGIS: the courier's marker glides along the map with an ETA; restaurants get a live order board, and an installable courier PWA works one-handed in dark mode.",
+      "Partner menu editor with photo upload, admin approvals and delivery-zone fees on a map, promo codes and ratings, plus a one-click /demo that plays the restaurant and courier through the real database rules.",
+      "Tested end to end: 76 pgTAP database tests, a Playwright order journey from customer to restaurant to courier with axe accessibility checks, and Lighthouse 100 for accessibility, best practices and SEO.",
+    ],
+    tags: ["Next.js", "TypeScript", "Supabase", "PostGIS", "Realtime", "PWA", "Arabic RTL"],
+    gradient: "from-violet-600/40 via-emerald-500/20 to-transparent",
+    image: "/projects/sekka.jpg",
+    repo: "https://github.com/AbanoubRashad/sekka",
+  },
+  {
     id: "basma-clinic",
     title: "Basma — Clinic Website & Booking Portal",
     category: "Multi-tenant SaaS · Healthcare",
